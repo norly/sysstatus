@@ -3,7 +3,7 @@ CCFLAGS=-Wall -Wextra -O3
 LDOUT=sysstatus
 LIBS=-lasound
 
-all: *.c *.h Makefile
+sysstatus: *.c *.h Makefile
 	make -C statuses
 	$(CC) $(CCFLAGS) -o $(LDOUT) $(LIBS) sysstatus.c statuses/*.o
 

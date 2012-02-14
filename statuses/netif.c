@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
 #include "netif.h"
@@ -18,7 +17,7 @@ void status_netif(char *ifname)
 	int ifpathlen;
 
 	char stline[16];
-	size_t stlen;
+	ssize_t stlen;
 
 	double ifsum = 0.0;
 	int ifsumpower;

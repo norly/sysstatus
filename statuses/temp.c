@@ -7,25 +7,25 @@ void status_temp(char *title, char *sysfile)
 {
 	char stline[16];
 	int stfile;
-	size_t stlen;
+	ssize_t stlen;
 
-	stfile = open(sysfile, 0);
-	if (stfile != -1)
+	stlen = fileRead(stline, sizeof(stline), sysfile);
+	if (stlen <= 0)
+		return;
+
+	// Read a valid value? Sometimes we get garbage from sysfs...
+	if (stlen < 6 || stlen > 7)
 	{
-		stlen = read(stfile, stline, sizeof(stline));
-		close(stfile);
-		if (stlen >= 6 && stlen <= 7)
-		{
-			fputs(" ^fg(#FF33FF)", stdout);
-			fputs(title, stdout);
-			fwrite(stline, 1, stlen - 4, stdout);
-			/*
-			fputs(".", stdout);
-			fwrite(&stline[stlen - 3], 1, 1, stdout);
-			*/
-			fputs("°C ", stdout);
-		}
-		else
-			printf(" ^fg(red)%sERROR ", title);
+		printf(" ^fg(red)%sERROR ", title);
+		return;
 	}
+
+	fputs(" ^fg(#FF33FF)", stdout);
+	fputs(title, stdout);
+	fwrite(stline, 1, stlen - 4, stdout);
+	/*
+	fputs(".", stdout);
+	fwrite(&stline[stlen - 3], 1, 1, stdout);
+	*/
+	fputs("°C ", stdout);
 }
