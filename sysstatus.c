@@ -5,7 +5,7 @@
 #include "statuses/uptime.h"
 #include "statuses/memusage.h"
 #include "statuses/cpuusage.h"
-#include "statuses/netif_named.h"
+#include "statuses/netif.h"
 #include "statuses/power.h"
 #include "statuses/volume_alsa.h"
 #include "statuses/temp.h"
@@ -22,11 +22,11 @@ void updatestatus()
 
 	status_memusage();
 
-	status_netif_named("eth0");
-	status_netif_named("eth1");
-	status_netif_named("wlan0");
-	status_netif_named("wlan1");
-	status_netif_named("ppp0");
+	status_netif("eth0");
+	status_netif("eth1");
+	status_netif("wlan0");
+	status_netif("wlan1");
+	status_netif("ppp0");
 
 	status_temp("GPU: ", "/sys/class/hwmon/hwmon0/device/temp4_input");
 	status_temp("CPU: ", "/sys/class/hwmon/hwmon0/device/temp2_input");
@@ -43,16 +43,14 @@ int main()
 {
 	struct timeval tv;
 
-	updatestatus();
-
 	for(;;)
 	{
+		updatestatus();
+
 		tv.tv_sec = UPDATE_SECS;
 		tv.tv_usec = 0;
 
 		select(0, NULL, NULL, NULL, &tv);
-
-		updatestatus();
 	}
 
 	return 0;

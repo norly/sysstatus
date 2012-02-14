@@ -9,6 +9,6 @@
 #define CPU_HISTORY_SIZE 10
 #define NUM_CPUS 2
 
-#define IFNAME "ppp0"
+#define NETIF_BASEDIR "/sys/class/net/"
 
 #endif
