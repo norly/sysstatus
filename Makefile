@@ -1,16 +1,12 @@
-build:
-	gcc -Wall -o sysstatus sysstatus.c \
-			statuses/tools.c \
-			statuses/uptime.c \
-			statuses/memusage.c \
-			statuses/cpuusage.c \
-			statuses/netif.c \
-			statuses/netif_named.c \
-			statuses/power.c \
-			statuses/volume_alsa.c \
-			statuses/temp.c \
-			statuses/datetime.c \
-			-lasound
+CC=gcc
+CCFLAGS=-Wall -Wextra -O3
+LDOUT=sysstatus
+LIBS=-lasound
+
+all: *.c *.h Makefile
+	make -C statuses
+	$(CC) $(CCFLAGS) -o $(LDOUT) $(LIBS) sysstatus.c statuses/*.o
 
 clean:
+	make -C statuses clean
 	rm -f sysstatus

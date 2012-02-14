@@ -1,4 +1,5 @@
 audstatus/*
 bitmaps/*
 *.log
+*.o
 sysstatus

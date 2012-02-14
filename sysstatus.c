@@ -2,15 +2,9 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
-//#include <ctype.h>
-//#include <memory.h>
-//#include <stdint.h>
-//#include <sys/socket.h>
-//#include <sys/un.h>
 #include "statuses/uptime.h"
 #include "statuses/memusage.h"
 #include "statuses/cpuusage.h"
-#include "statuses/netif.h"
 #include "statuses/netif_named.h"
 #include "statuses/power.h"
 #include "statuses/volume_alsa.h"
@@ -28,7 +22,6 @@ void updatestatus()
 
 	status_memusage();
 
-	//status_netif();
 	status_netif_named("eth0");
 	status_netif_named("eth1");
 	status_netif_named("wlan0");
