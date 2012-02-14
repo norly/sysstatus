@@ -23,11 +23,11 @@ float cpu_history[CPU_HISTORY_SIZE]; // don't care about init values
 void status_cpuusage()
 {
 	double loadavg[3] = { -13.37, -13.37, -13.37 } ;
-	
+
 	char *stline = NULL;
 	size_t stlen;
 	FILE *stfile;
-	
+
 	unsigned long cpu_user;
 	unsigned long cpu_nice;
 	unsigned long cpu_sys;
@@ -35,51 +35,51 @@ void status_cpuusage()
 	unsigned long cpu_idle;
 	unsigned long cpu_total;
 	int i;
-	
-	
+
+
 	fputs("^fg(yellow)", stdout);	// Error signaling color
-	
+
 	stfile = fopen("/proc/stat", "r");
 	if (stfile != NULL)
 	{
 		for(i = CPU_HISTORY_SIZE - 1; i > 0; i--)
 			cpu_history[i] = cpu_history[i - 1];
-		
+
 		stlen = getline(&stline, &stlen, stfile);
 		fclose(stfile);
-		
-		if ( 4 == sscanf(stline, "%*s %ld %ld %ld %ld", &cpu_user, &cpu_nice, &cpu_sys, &cpu_idle) );
+
+		if ( 4 == sscanf(stline, "%*s %ld %ld %ld %ld", &cpu_user, &cpu_nice, &cpu_sys, &cpu_idle) )
 		{
 			cpu_used = cpu_user + cpu_nice + cpu_sys;
 			cpu_total = cpu_used + cpu_idle;
-			
+
 			// Now do the percentage
 			cpu_history[0] = (float)(cpu_used - last_cpu_used) /
 						(float)(cpu_total - last_cpu_total);
-			
+
 			last_cpu_used = cpu_used;
 			last_cpu_total = cpu_total;
-			
-			
+
+
 			if (cpu_history[0] < 0.4)
 				fputs("^fg(#0077FF)", stdout);	// CPU idling OK
 			else
 				fputs("^fg(#FF00FF)", stdout);	// CPU busy
-			
+
 			//printf(" CPU: %.0f%% ", cpu_history[0] * 100);
 		}
-		
+
 		free(stline);
 	}
-	
-	
-	if (getloadavg(loadavg, 3) > 0);
+
+
+	if (getloadavg(loadavg, 3) > 0)
 		printf(" %s%.0f,%.0f,%.0f,%.0f ",
 			cpu_history[0] < 0.1000 ? " " : "",
 			cpu_history[0] * 100,
 			loadavg[0] * (100 / 1),
 			loadavg[1] * (100 / 1),	// (100 / NUM_CPUS)
 			loadavg[2] * (100 / 1));
-	
+
 	//fputs(" CPU usage ", stdout);
 }

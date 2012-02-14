@@ -1,7 +1,6 @@
 #include <stdio.h>
-#include <fcntl.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include "config.h"
 #include "statuses/battery.h"
 #include "statuses/cpuusage.h"
 #include "statuses/datetime.h"
@@ -10,7 +9,7 @@
 #include "statuses/volume_alsa.h"
 #include "statuses/temp.h"
 #include "statuses/uptime.h"
-#include "config.h"
+
 
 void updatestatus()
 {
