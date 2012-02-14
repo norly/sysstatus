@@ -2,14 +2,14 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "statuses/uptime.h"
-#include "statuses/memusage.h"
+#include "statuses/battery.h"
 #include "statuses/cpuusage.h"
+#include "statuses/datetime.h"
+#include "statuses/memusage.h"
 #include "statuses/netif.h"
-#include "statuses/power.h"
 #include "statuses/volume_alsa.h"
 #include "statuses/temp.h"
-#include "statuses/datetime.h"
+#include "statuses/uptime.h"
 #include "config.h"
 
 void updatestatus()
@@ -18,7 +18,7 @@ void updatestatus()
 
 	status_cpuusage();
 
-	status_power();
+	status_battery("BAT0");
 
 	status_memusage();
 
