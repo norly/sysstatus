@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "string.h"
 #include "battery.h"
 
@@ -20,6 +21,7 @@ void status_battery(char *batname)
 	int batt_full = -1;
 	int batt_percent = -1;
 	int batt_current = 1;
+	int batt_power = 1;
 	int batt_voltage = 0;
 	float batt_time = -1;
 	float batt_watts = -1;
@@ -38,6 +40,14 @@ void status_battery(char *batname)
 	strcat(batpath, batname);
 
 
+	// Is the battery present?
+	if (access(batpath, F_OK))
+	{
+		//printf(" ^fg(grey)[%s] ", batname);
+		return;
+	}
+
+
 	// Get info
 	strcpy(&batpath[batpathlen], "/energy_now");
 	stlen = fileRead(stline, sizeof(stline), batpath);
@@ -49,10 +59,10 @@ void status_battery(char *batname)
 	if (stlen > 0)
 		batt_full = atoi(stline);
 
-	strcpy(&batpath[batpathlen], "/current_now");
+	strcpy(&batpath[batpathlen], "/power_now");
 	stlen = fileRead(stline, sizeof(stline), batpath);
 	if (stlen > 0)
-		batt_current = atoi(stline);
+		batt_power = atoi(stline);
 
 	strcpy(&batpath[batpathlen], "/voltage_now");
 	stlen = fileRead(stline, sizeof(stline), batpath);
@@ -84,8 +94,9 @@ void status_battery(char *batname)
 			fputs("^fg(green)", stdout);
 	}
 
+	batt_current = ((float)batt_power * 100) / ((float)batt_voltage / 100000);
 	batt_time = (float)batt_now / (float)batt_current;
-	batt_watts = ((float)batt_voltage / 1000000) * ((float)batt_current / 10000000);
+	batt_watts = ((float)batt_power / 1000000);
 
 	if (batt_watts == 0)	// fully charged and not in use
 		printf(" %s: %d%% _ _ ", batname, batt_percent);

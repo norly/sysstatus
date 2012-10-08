@@ -4,6 +4,7 @@
 #include "statuses/battery.h"
 #include "statuses/cpuusage.h"
 #include "statuses/datetime.h"
+#include "statuses/fan.h"
 #include "statuses/memusage.h"
 #include "statuses/netif.h"
 #include "statuses/volume_alsa.h"
@@ -18,17 +19,23 @@ void updatestatus()
 	status_cpuusage();
 
 	status_battery("BAT0");
+	status_battery("BAT1");
 
 	status_memusage();
 
 	status_netif("eth0");
-	status_netif("eth1");
+	//status_netif("eth1");
+	//status_netif("eth2");
 	status_netif("wlan0");
-	status_netif("wlan1");
+	//status_netif("wlan1");
+	//status_netif("usb0");
 	status_netif("ppp0");
 
-	status_temp("GPU: ", "/sys/class/hwmon/hwmon0/device/temp4_input");
-	status_temp("CPU: ", "/sys/class/hwmon/hwmon0/device/temp2_input");
+	//status_temp("GPU: ", "/sys/class/hwmon/hwmon0/device/temp4_input");
+	//status_temp("CPU: ", "/sys/class/hwmon/hwmon0/device/temp2_input");
+	status_temp("CPU: ", "/sys/class/hwmon/hwmon1/device/temp1_input");
+
+	status_fan("Fan: ", "/sys/class/hwmon/hwmon2/device/fan1_input");
 
 	status_volume_alsa("default", "Master", 0);
 

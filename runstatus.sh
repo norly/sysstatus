@@ -1,14 +1,16 @@
 #!/bin/sh
 
+MAXRESX=1680
+
 RES=$(xrandr --prop | sed "s/Screen 0:[^,]*, current \(.*\) x \(.*\),.*/\1,\2/g;te;d;:e")
 RESX=${RES%%,*}
 RESY=${RES##*,}
 FONT="-misc-fixed-medium-r-normal--13-120-75-75-C-70-iso8859-1"
 #FONT="-*-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-*-*"
 
-if [ $((RESX)) -gt 1920 ]
+if [ $((RESX)) -gt $((MAXRESX)) ]
 then
-	RESX=1920
+	RESX=$((MAXRESX))
 fi
 
 cd ~/sysstatus/

@@ -57,6 +57,8 @@ void status_netif(char *ifname)
 			//fputs("^fg(red)", stdout);
 			return;
 		}
+	} else {
+		return;
 	}
 
 	strcpy(&ifpath[ifpathlen], "/statistics/rx_bytes");
