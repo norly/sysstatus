@@ -1,6 +1,6 @@
 #!/bin/sh
 
-MAXRESX=1680
+MAXRESX=1920
 
 RES=$(xrandr --prop | sed "s/Screen 0:[^,]*, current \(.*\) x \(.*\),.*/\1,\2/g;te;d;:e")
 RESX=${RES%%,*}

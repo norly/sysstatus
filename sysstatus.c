@@ -33,9 +33,9 @@ void updatestatus()
 
 	//status_temp("GPU: ", "/sys/class/hwmon/hwmon0/device/temp4_input");
 	//status_temp("CPU: ", "/sys/class/hwmon/hwmon0/device/temp2_input");
-	status_temp("CPU: ", "/sys/class/hwmon/hwmon1/device/temp1_input");
+	status_temp("CPU: ", "/sys/devices/platform/coretemp.0/temp1_input");
 
-	status_fan("Fan: ", "/sys/class/hwmon/hwmon2/device/fan1_input");
+	status_fan("Fan: ", "/sys/devices/platform/thinkpad_hwmon/fan1_input");
 
 	status_volume_alsa("default", "Master", 0);
 
