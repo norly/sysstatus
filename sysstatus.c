@@ -28,6 +28,7 @@ void updatestatus()
 	//status_netif("eth2");
 	status_netif("wlan0");
 	//status_netif("wlan1");
+        status_netif("wlan2");
 	//status_netif("usb0");
 	status_netif("ppp0");
 

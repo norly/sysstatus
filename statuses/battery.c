@@ -17,14 +17,12 @@ void status_battery(char *batname)
 	char stline[16];
 	ssize_t stlen;
 
-	int batt_now = 0;
-	int batt_full = -1;
-	int batt_percent = -1;
-	int batt_current = 1;
-	int batt_power = 1;
-	int batt_voltage = 0;
-	float batt_time = -1;
-	float batt_watts = -1;
+	int chargeNow = 0;
+	int chargeFull = -1;
+	int chargePercent = -1;
+	int battW = 1;
+	int battV = 0;
+	float battTime = -1;
 
 
 	// Prepare path
@@ -52,33 +50,33 @@ void status_battery(char *batname)
 	strcpy(&batpath[batpathlen], "/energy_now");
 	stlen = fileRead(stline, sizeof(stline), batpath);
 	if (stlen > 0)
-		batt_now = atoi(stline);
+		chargeNow = atoi(stline);
 
 	strcpy(&batpath[batpathlen], "/energy_full");
 	stlen = fileRead(stline, sizeof(stline), batpath);
 	if (stlen > 0)
-		batt_full = atoi(stline);
+		chargeFull = atoi(stline);
 
 	strcpy(&batpath[batpathlen], "/power_now");
 	stlen = fileRead(stline, sizeof(stline), batpath);
 	if (stlen > 0)
-		batt_power = atoi(stline);
+		battW = atoi(stline);
 
 	strcpy(&batpath[batpathlen], "/voltage_now");
 	stlen = fileRead(stline, sizeof(stline), batpath);
 	if (stlen > 0)
-		batt_voltage = atoi(stline);
+		battV = atoi(stline);
 
 
 	// Prettyprint
-	if (batt_full > 0)
-		batt_percent = batt_now / (batt_full / 100);
+	if (chargeFull > 0)
+		chargePercent = chargeNow / (chargeFull / 100);
 
-	if (batt_percent <= 40) // 40
+	if (chargePercent <= 40) // 40
 	{
-		if (batt_percent <= 25) // 25
+		if (chargePercent <= 25) // 25
 		{
-			if (batt_percent <= 10) // 10
+			if (chargePercent <= 10) // 10
 				fputs("^fg(red)", stdout);
 			else // 11-25%
 				fputs("^fg(orange)", stdout);
@@ -88,19 +86,18 @@ void status_battery(char *batname)
 	}
 	else
 	{
-		if (batt_percent > 70) // 70
+		if (chargePercent > 70) // 70
 			fputs("^fg(white)", stdout);
 		else // 41-70%
 			fputs("^fg(green)", stdout);
 	}
 
-	batt_current = ((float)batt_power * 100) / ((float)batt_voltage / 100000);
-	batt_time = (float)batt_now / (float)batt_current;
-	batt_watts = ((float)batt_power / 1000000);
+	battTime = (float)chargeNow / (float)battW;
 
-	if (batt_watts == 0)	// fully charged and not in use
-		printf(" %s: %d%% _ _ ", batname, batt_percent);
+	if (battW == 0)	// fully charged and not in use
+		printf(" %s: %d%% _ _ ",
+			batname, chargePercent);
 	else
 		printf(" %s: %d%% %.1fh %.1fW ",
-			batname, batt_percent, batt_time, batt_watts);
+			batname, chargePercent, battTime, (float)battW / 1000000.0);
 }
