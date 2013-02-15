@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <time.h>
-#include "datetime.h"
-#include "../config.h"
+
+#include "status/datetime.h"
+#include "config.h"
+
 
 void status_datetime()
 {

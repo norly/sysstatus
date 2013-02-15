@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "memusage.h"
+
+#include "status/memusage.h"
 #include "tools.h"
+
 
 void status_memusage()
 {

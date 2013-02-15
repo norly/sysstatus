@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include "netif.h"
+
+#include "status/netif.h"
 #include "tools.h"
-#include "../config.h"
+#include "config.h"
 
 #ifndef NETIF_BASEDIR
   #define NETIF_BASEDIR "/sys/class/net/"

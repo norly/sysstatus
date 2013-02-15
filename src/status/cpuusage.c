@@ -2,8 +2,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include "cpuusage.h"
-#include "../config.h"
+
+#include "status/cpuusage.h"
+#include "config.h"
 
 #ifndef NUM_CPUS
   #define NUM_CPUS 1

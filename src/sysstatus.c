@@ -1,15 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "config.h"
-#include "statuses/battery.h"
-#include "statuses/cpuusage.h"
-#include "statuses/datetime.h"
-#include "statuses/fan.h"
-#include "statuses/memusage.h"
-#include "statuses/netif.h"
-#include "statuses/volume_alsa.h"
-#include "statuses/temp.h"
-#include "statuses/uptime.h"
+#include "status/battery.h"
+#include "status/cpuusage.h"
+#include "status/datetime.h"
+#include "status/fan.h"
+#include "status/memusage.h"
+#include "status/netif.h"
+#include "status/volume_alsa.h"
+#include "status/temp.h"
+#include "status/uptime.h"
 
 
 void updatestatus()

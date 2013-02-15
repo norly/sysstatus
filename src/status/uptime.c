@@ -2,13 +2,14 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include "uptime.h"
-#include "../config.h"
+
+#include "status/uptime.h"
+#include "tools.h"
+#include "config.h"
 
 void status_uptime()
 {
   char stline[16];
-  int stfile;
   ssize_t stlen;
   int i;
   int upts, uptm, upth, uptd;

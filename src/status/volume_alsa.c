@@ -1,5 +1,7 @@
 #include <alsa/asoundlib.h>
-#include "volume_alsa.h"
+
+#include "status/volume_alsa.h"
+
 
 int status_volume_alsa(char *cardname, char *mixername, snd_mixer_selem_channel_id_t channel)
 {

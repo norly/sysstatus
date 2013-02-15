@@ -15,5 +15,5 @@ fi
 
 cd ~/sysstatus/
 killall sysstatus
-./sysstatus | dzen2  -ta l -fn "$FONT" -bg black -w $((RESX)) -y $((RESY+82)) -h 18 -ta r -expand left -e ""
+./build/sysstatus | dzen2  -ta l -fn "$FONT" -bg black -w $((RESX)) -y $((RESY+82)) -h 18 -ta r -expand left -e ""
 #./sysstatus | tee /dev/shm/sysstatus-log | dzen2  -ta l -fn "$FONT" -bg black -y $((RESY+82)) -h 18 -ta r -expand left -e ""

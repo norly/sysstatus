@@ -1,5 +1,5 @@
-audstatus/*
-bitmaps/*
-*.log
-*.o
-sysstatus
+/audstatus
+/bitmaps
+/build
+.log
+.o

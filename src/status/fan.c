@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "fan.h"
+
+#include "status/fan.h"
+#include "tools.h"
+
 
 void status_fan(char *title, char *sysfile)
 {
   char stline[16];
-  int stfile;
   ssize_t stlen;
 
   stlen = fileRead(stline, sizeof(stline), sysfile);

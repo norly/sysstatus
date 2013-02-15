@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "string.h"
-#include "battery.h"
+#include <string.h>
+
+#include "status/battery.h"
+#include "tools.h"
 
 #ifndef POWER_BASEDIR
   #define POWER_BASEDIR "/sys/class/power_supply/"
@@ -21,7 +23,6 @@ void status_battery(char *batname)
   int chargeFull = -1;
   int chargePercent = -1;
   int battW = 1;
-  int battV = 0;
   float battTime = -1;
 
 
@@ -61,12 +62,6 @@ void status_battery(char *batname)
   stlen = fileRead(stline, sizeof(stline), batpath);
   if (stlen > 0) {
     battW = atoi(stline);
-  }
-
-  strcpy(&batpath[batpathlen], "/voltage_now");
-  stlen = fileRead(stline, sizeof(stline), batpath);
-  if (stlen > 0) {
-    battV = atoi(stline);
   }
 
 
