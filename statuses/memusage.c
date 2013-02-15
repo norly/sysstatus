@@ -5,44 +5,45 @@
 
 void status_memusage()
 {
-	char *stline = NULL;
-	size_t stlen;
-	FILE *stfile;
+  char *stline = NULL;
+  size_t stlen;
+  FILE *stfile;
 
-	int memtotal = 0;
-	int memfree = 0;
-	int memused;
-	int membuffers = 0;
-	int memcached = 0;
+  int memtotal = 0;
+  int memfree = 0;
+  int memused;
+  int membuffers = 0;
+  int memcached = 0;
 
 
-	stfile = fopen("/proc/meminfo", "r");
-	if (stfile != NULL)
-	{
-		stlen = getline(&stline, &stlen, stfile);
-		memtotal = atoi(&stline[17]);
+  stfile = fopen("/proc/meminfo", "r");
+  if (stfile != NULL) {
+    stlen = getline(&stline, &stlen, stfile);
+    memtotal = atoi(&stline[17]);
 
-		stlen = getline(&stline, &stlen, stfile);
-		memfree = atoi(&stline[17]);
+    stlen = getline(&stline, &stlen, stfile);
+    memfree = atoi(&stline[17]);
 
-		stlen = getline(&stline, &stlen, stfile);
-		membuffers = atoi(&stline[17]);
+    stlen = getline(&stline, &stlen, stfile);
+    membuffers = atoi(&stline[17]);
 
-		stlen = getline(&stline, &stlen, stfile);
-		memcached = atoi(&stline[17]);
-		free(stline);
+    stlen = getline(&stline, &stlen, stfile);
+    memcached = atoi(&stline[17]);
+    free(stline);
 
-		fclose(stfile);
+    fclose(stfile);
 
-		memused = memtotal - memfree - memcached - membuffers;
+    memused = memtotal - memfree - memcached - membuffers;
 
-		memused /= 1024;	// Just show MBs used
+    memused /= 1024;	// Just show MBs used
 
-		if ((float)memused / (float)memtotal < 0.85)
-			fputs("^fg(green)", stdout);	// < 85% mem used
-		else
-			fputs("^fg(red)", stdout);	// >= 85% mem used
+    /* Change color based on % of RAM used */
+    if ((float)memused / (float)memtotal < 0.85) {
+      fputs("^fg(green)", stdout);
+    } else {
+      fputs("^fg(red)", stdout);
+    }
 
-		printf(" Mem: %d M ", memused);
-	}
+    printf(" Mem: %d M ", memused);
+  }
 }
