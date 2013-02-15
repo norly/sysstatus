@@ -2,14 +2,21 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "status/fan.h"
+#include "common.h"
 #include "tools.h"
 
 
-void status_fan(char *title, char *sysfile)
+void status_fan(GlobalData *g, char *title, char *sysfile)
 {
+  StatusItem s;
+  char text[16] = { 0 };
+
   char stline[16];
   ssize_t stlen;
+
+
+  statusitem_init(&s);
+  s.text = text;
 
   stlen = fileRead(stline, sizeof(stline), sysfile);
   if (stlen <= 0) {
@@ -18,12 +25,14 @@ void status_fan(char *title, char *sysfile)
 
   // Read a valid value? Sometimes we get garbage from sysfs...
   if (stlen > 5) {
-    printf(" ^fg(red)%sERROR ", title);
-    return;
+    s.color = "red";
+    snprintf(text, sizeof(text), "%sERROR", title);
+  } else {
+    stline[stlen - 1] = '\0';
+
+    s.color = "#CCCCCC";
+    snprintf(text, sizeof(text), "%s%s rpm", title, stline);
   }
 
-  fputs(" ^fg(#CCCCCC)", stdout);
-  fputs(title, stdout);
-  fwrite(stline, 1, stlen - 1, stdout);
-  fputs(" rpm ", stdout);
+  line_append_item(g, &s);
 }

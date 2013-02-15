@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "status/battery.h"
+#include "common.h"
 #include "tools.h"
 
 #ifndef POWER_BASEDIR
@@ -11,8 +11,11 @@
 #endif
 
 
-void status_battery(char *batname)
+void status_battery(GlobalData *g, char *batname)
 {
+  StatusItem s;
+  char text[32] = { 0 };
+
   char batpath[256];
   int batpathlen;
 
@@ -25,6 +28,9 @@ void status_battery(char *batname)
   int battW = 1;
   float battTime = -1;
 
+
+  statusitem_init(&s);
+  s.text = text;
 
   /* Prepare path */
   batpathlen = sizeof(POWER_BASEDIR) - 1 + strlen(batname);
@@ -73,21 +79,21 @@ void status_battery(char *batname)
   if (chargePercent <= 40) {
     if (chargePercent <= 25) {
       if (chargePercent <= 10) {
-        fputs("^fg(red)", stdout);
+        s.color = "red";
       } else {
         // 11-25%
-        fputs("^fg(orange)", stdout);
+        s.color = "orange";
       }
     } else {
       // 26-40%
-      fputs("^fg(yellow)", stdout);
+      s.color = "yellow";
     }
   } else {
     if (chargePercent > 70) {
-      fputs("^fg(white)", stdout);
+      s.color = "white";
     } else {
       // 41-70%
-      fputs("^fg(green)", stdout);
+      s.color = "green";
     }
   }
 
@@ -95,10 +101,12 @@ void status_battery(char *batname)
 
   if (battW == 0) {
     // fully charged and not in use
-    printf(" %s: %d%% _ _ ",
-            batname, chargePercent);
+    snprintf(text, sizeof(text), "%s: %d%% _ _",
+              batname, chargePercent);
   } else {
-    printf(" %s: %d%% %.1fh %.1fW ",
-            batname, chargePercent, battTime, (float)battW / 1000000.0);
+    snprintf(text, sizeof(text), "%s: %d%% %.1fh %.1fW",
+              batname, chargePercent, battTime, (float)battW / 1000000.0);
   }
+
+  line_append_item(g, &s);
 }

@@ -1,10 +1,16 @@
 #include <alsa/asoundlib.h>
 
-#include "status/volume_alsa.h"
+#include "common.h"
 
 
-int status_volume_alsa(char *cardname, char *mixername, snd_mixer_selem_channel_id_t channel)
+int status_volume_alsa(GlobalData *g,
+                        char *cardname,
+                        char *mixername,
+                        snd_mixer_selem_channel_id_t channel)
 {
+  StatusItem s;
+  char text[16] = { 0 };
+
   snd_mixer_t *handle = NULL;
   snd_mixer_elem_t *elem;
   snd_mixer_selem_id_t *sid;
@@ -13,6 +19,9 @@ int status_volume_alsa(char *cardname, char *mixername, snd_mixer_selem_channel_
   long volume;
   int on_off;
 
+
+  statusitem_init(&s);
+  s.text = text;
 
   snd_mixer_selem_id_alloca(&sid);
 
@@ -42,25 +51,16 @@ int status_volume_alsa(char *cardname, char *mixername, snd_mixer_selem_channel_
   if (snd_mixer_selem_has_playback_volume(elem)
       && snd_mixer_selem_has_playback_channel(elem, channel)) {
     snd_mixer_selem_get_playback_switch(elem, channel, &on_off);
-    if (on_off) {
-      fputs("^fg(#22FF22)", stdout);
-    } else {
-      fputs("^fg(red)", stdout);
-    }
-
     snd_mixer_selem_get_playback_volume_range(elem, &min, &max);
-
     snd_mixer_selem_get_playback_volume(elem, channel, &volume);
-    fputs("^ca(1, amixer sset Master toggle)", stdout);
-    fputs("^ca(4, amixer sset Master 2+ unmute)", stdout);
-    fputs("^ca(5, amixer sset Master 2- unmute)", stdout);
-    printf(" Vol: %d ", (int)volume);
-    fputs("^ca()", stdout);
-    fputs("^ca()", stdout);
-    fputs("^ca()", stdout);
+
+    s.color = on_off ? "#22FF22" : "red";
+    snprintf(text, sizeof(text), "Vol: %d", (int)volume);
   }
 
   snd_mixer_close(handle);
+
+  line_append_item(g, &s);
 
   return 0;
 

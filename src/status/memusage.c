@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "status/memusage.h"
+#include "common.h"
 #include "tools.h"
 
 
-void status_memusage()
+void status_memusage(GlobalData *g)
 {
+  StatusItem s;
+  char text[16] = { 0 };
+
   char *stline = NULL;
   size_t stlen;
   FILE *stfile;
@@ -17,6 +20,9 @@ void status_memusage()
   int membuffers = 0;
   int memcached = 0;
 
+
+  statusitem_init(&s);
+  s.text = text;
 
   stfile = fopen("/proc/meminfo", "r");
   if (stfile != NULL) {
@@ -41,11 +47,13 @@ void status_memusage()
 
     /* Change color based on % of RAM used */
     if ((float)memused / (float)memtotal < 0.85) {
-      fputs("^fg(green)", stdout);
+      s.color = "green";
     } else {
-      fputs("^fg(red)", stdout);
+      s.color = "red";
     }
 
-    printf(" Mem: %d M ", memused);
+    snprintf(text, sizeof(text), "Mem: %d M", memused);
+
+    line_append_item(g, &s);
   }
 }

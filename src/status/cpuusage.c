@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "status/cpuusage.h"
+#include "common.h"
 #include "config.h"
 
 #ifndef NUM_CPUS
@@ -21,8 +21,11 @@ unsigned long last_cpu_used = 0;
 unsigned long last_cpu_total = 0;
 float cpu_history[CPU_HISTORY_SIZE]; // don't care about init values
 
-void status_cpuusage()
+void status_cpuusage(GlobalData *g)
 {
+  StatusItem s;
+  char text[32] = { 0 };
+
   double loadavg[3] = { -13.37, -13.37, -13.37 } ;
 
   char *stline = NULL;
@@ -38,8 +41,11 @@ void status_cpuusage()
   int i;
 
 
+  statusitem_init(&s);
+  s.text = text;
+
   // Error signaling color
-  fputs("^fg(yellow)", stdout);
+  s.color = "yellow";
 
   stfile = fopen("/proc/stat", "r");
   if (stfile != NULL) {
@@ -65,13 +71,11 @@ void status_cpuusage()
 
       if (cpu_history[0] < 0.4) {
         // CPU idling OK
-        fputs("^fg(#0077FF)", stdout);
+        s.color = "#0077FF";
       } else {
         // CPU busy
-        fputs("^fg(#FF00FF)", stdout);
+        s.color = "#FF00FF";
       }
-
-      //printf(" CPU: %.0f%% ", cpu_history[0] * 100);
     }
 
     free(stline);
@@ -79,13 +83,14 @@ void status_cpuusage()
 
 
   if (getloadavg(loadavg, 3) > 0) {
-    printf(" %s%.0f,%.0f,%.0f,%.0f ",
-            cpu_history[0] < 0.1000 ? " " : "",
-            cpu_history[0] * 100,
-            loadavg[0] * (100 / 1),
-            loadavg[1] * (100 / 1),  // (100 / NUM_CPUS)
-            loadavg[2] * (100 / 1));
+    snprintf(text, sizeof(text),
+              "%s%.0f,%.0f,%.0f,%.0f",
+              cpu_history[0] < 0.1000 ? " " : "",
+              cpu_history[0] * 100,
+              loadavg[0] * (100 / 1),
+              loadavg[1] * (100 / 1),  // (100 / NUM_CPUS)
+              loadavg[2] * (100 / 1));
   }
 
-  //fputs(" CPU usage ", stdout);
+  line_append_item(g, &s);
 }

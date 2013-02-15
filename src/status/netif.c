@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "status/netif.h"
+#include "common.h"
 #include "tools.h"
 #include "config.h"
 
@@ -12,8 +12,11 @@
 #endif
 
 
-void status_netif(char *ifname)
+void status_netif(GlobalData *g, char *ifname)
 {
+  StatusItem s;
+  char text[16] = { 0 };
+
   char ifpath[256];
   int ifpathlen;
 
@@ -23,6 +26,9 @@ void status_netif(char *ifname)
   double ifsum = 0.0;
   int ifsumpower;
 
+
+  statusitem_init(&s);
+  s.text = text;
 
   /* Prepare path */
   ifpathlen = sizeof(NETIF_BASEDIR) - 1 + strlen(ifname);
@@ -38,7 +44,7 @@ void status_netif(char *ifname)
 
   /* Is the interface up? */
   if (access(ifpath, F_OK)) {
-    //printf(" ^fg(grey)[%s] ", ifname);
+    //s.color = "grey";
     return;
   }
 
@@ -47,9 +53,9 @@ void status_netif(char *ifname)
   stlen = fileRead(stline, sizeof(stline), ifpath);
   if (stlen > 0) {
     if (stline[0] == '1') {
-      fputs("^fg(yellow)", stdout);
+      s.color = "yellow";
     } else {
-      //fputs("^fg(red)", stdout);
+      //s.color = "red";
       return;
     }
   } else {
@@ -73,8 +79,11 @@ void status_netif(char *ifname)
     ifsum = ifsum / 1024;
   }
 
-  printf(" %s: %.*f %c ", ifname,
-                          ifsumpower ? ifsumpower - 1 : ifsumpower,
-                          ifsum,
-                          powerToChar(ifsumpower));
+  snprintf(text, sizeof(text), "%s: %.*f %c",
+            ifname,
+            ifsumpower ? ifsumpower - 1 : ifsumpower,
+            ifsum,
+            powerToChar(ifsumpower));
+
+  line_append_item(g, &s);
 }

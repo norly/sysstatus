@@ -1,49 +1,56 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "common.h"
 #include "config.h"
-#include "status/battery.h"
-#include "status/cpuusage.h"
-#include "status/datetime.h"
-#include "status/fan.h"
-#include "status/memusage.h"
-#include "status/netif.h"
-#include "status/volume_alsa.h"
-#include "status/temp.h"
-#include "status/uptime.h"
+#include "statuses.h"
+
+
+static char outline[1024];
+
+static GlobalData gd = {
+  .line = outline,
+  .linemax = sizeof(outline),
+};
 
 
 void updatestatus()
 {
-  //status_uptime();
+  GlobalData *g = &gd;
 
-  status_cpuusage();
 
-  status_battery("BAT0");
-  status_battery("BAT1");
+  line_clear(g);
 
-  status_memusage();
+  //status_uptime(g);
 
-  status_netif("eth0");
-  //status_netif("eth1");
-  //status_netif("eth2");
-  status_netif("wlan0");
-  //status_netif("wlan1");
-  status_netif("wlan2");
-  //status_netif("usb0");
-  status_netif("ppp0");
+  status_cpuusage(g);
+
+  status_battery(g, "BAT0");
+  status_battery(g, "BAT1");
+
+  status_memusage(g);
+
+  status_netif(g, "eth0");
+  //status_netif(g, "eth1");
+  //status_netif(g, "eth2");
+  status_netif(g, "wlan0");
+  //status_netif(g, "wlan1");
+  status_netif(g, "wlan2");
+  //status_netif(g, "usb0");
+  status_netif(g, "ppp0");
 
   //status_temp("GPU: ", "/sys/class/hwmon/hwmon0/device/temp4_input");
   //status_temp("CPU: ", "/sys/class/hwmon/hwmon0/device/temp2_input");
-  status_temp("CPU: ", "/sys/devices/platform/coretemp.0/temp1_input");
+  status_temp(g, "CPU: ", "/sys/devices/platform/coretemp.0/temp1_input");
 
-  status_fan("Fan: ", "/sys/devices/platform/thinkpad_hwmon/fan1_input");
+  status_fan(g, "Fan: ", "/sys/devices/platform/thinkpad_hwmon/fan1_input");
 
-  status_volume_alsa("default", "Master", 0);
+  status_volume_alsa(g, "default", "Master", 0);
 
-  status_datetime();
+  status_datetime(g);
 
-  fputs("\n", stdout);
+  line_print(g);
+
   fflush(stdout);
 }
 
