@@ -6,7 +6,7 @@
 #include "statuses.h"
 
 
-static char outline[1024];
+static char outline[4096];
 
 static GlobalData gd = {
   .line = outline,
@@ -57,6 +57,9 @@ void updatestatus()
 int main()
 {
   struct timeval tv;
+
+  /* Initial JSON header for i3bar */
+  printf("{\"version\":1}\n[\n");
 
   for(;;)
   {

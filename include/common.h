@@ -15,6 +15,7 @@ typedef struct GlobalData {
   char *line;
   size_t linelen;
   size_t linemax; /* Buffer size, including NUL */
+  int firstItemDone;
 } GlobalData;
 
 

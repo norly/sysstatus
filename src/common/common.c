@@ -18,6 +18,9 @@ void line_clear(GlobalData *g)
 
   g->line[0] = '\0';
   g->linelen = 0;
+  g->firstItemDone = 0;
+
+  line_append_str(g, "[");
 }
 
 
@@ -45,24 +48,31 @@ void line_append_str(GlobalData *g, char *string)
 
 void line_append_item(GlobalData *g, StatusItem *s)
 {
-  line_append_str(g, " ");
+  if (g->firstItemDone) {
+    line_append_str(g, ",");
+  }
+  g->firstItemDone = 1;
+
+  line_append_str(g, "{");
 
   if (s->color) {
-    line_append_str(g, "^fg(");
+    line_append_str(g, "\"color\":\"");
     line_append_str(g, s->color);
-    line_append_str(g, ")");
+    line_append_str(g, "\",");
   }
 
-  if (s->text) {
-    line_append_str(g, s->text);
-  }
+  line_append_str(g, "\"full_text\":\"");
+  assert(s->text);
+  line_append_str(g, s->text);
+  line_append_str(g, "\"");
 
-  line_append_str(g, " ");
+  line_append_str(g, "}");
 }
 
 
 void line_print(GlobalData *g)
 {
+  line_append_str(g, "],");
   puts(g->line);
 }
 

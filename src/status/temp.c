@@ -34,7 +34,7 @@ void status_temp(GlobalData *g, char *title, char *sysfile)
     stline[stlen - 4] = '\0';
 
     s.color = "#FF33FF";
-    snprintf(text, sizeof(text), "%s%s°C", title, stline);
+    snprintf(text, sizeof(text), "%s%s C", title, stline);
   }
 
   line_append_item(g, &s);
