@@ -47,9 +47,9 @@ void status_memusage(GlobalData *g)
 
     /* Change color based on % of RAM used */
     if ((float)memused / (float)memtotal < 0.85) {
-      s.color = "green";
+      s.color = "#22FF22";  // green
     } else {
-      s.color = "red";
+      s.color = "#FF0000";  // red
     }
 
     snprintf(text, sizeof(text), "Mem: %d M", memused);

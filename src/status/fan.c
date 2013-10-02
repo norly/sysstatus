@@ -25,7 +25,7 @@ void status_fan(GlobalData *g, char *title, char *sysfile)
 
   // Read a valid value? Sometimes we get garbage from sysfs...
   if (stlen > 5) {
-    s.color = "red";
+    s.color = "#FF0000";  // red
     snprintf(text, sizeof(text), "%sERROR", title);
   } else {
     stline[stlen - 1] = '\0';

@@ -45,7 +45,7 @@ void status_cpuusage(GlobalData *g)
   s.text = text;
 
   // Error signaling color
-  s.color = "yellow";
+  s.color = "#FFFF00";  // yellow
 
   stfile = fopen("/proc/stat", "r");
   if (stfile != NULL) {

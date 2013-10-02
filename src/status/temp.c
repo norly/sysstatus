@@ -28,7 +28,7 @@ void status_temp(GlobalData *g, char *title, char *sysfile)
    * Sometimes we get garbage from sysfs...
    */
   if (stlen < 6 || stlen > 7) {
-    s.color = "red";
+    s.color = "#FF0000";  // red
     snprintf(text, sizeof(text), "%sERROR", title);
   } else {
     stline[stlen - 4] = '\0';

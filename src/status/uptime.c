@@ -23,7 +23,7 @@ void status_uptime(GlobalData *g)
 
   stlen = fileRead(stline, sizeof(stline), "/proc/uptime");
   if (stlen < 0) {
-    s.color = "red";
+    s.color = "#FF0000";  // red
     s.text = "up: ERROR";
   } else {
     unsigned textlen = 0;

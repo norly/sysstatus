@@ -79,21 +79,21 @@ void status_battery(GlobalData *g, char *batname)
   if (chargePercent <= 40) {
     if (chargePercent <= 25) {
       if (chargePercent <= 10) {
-        s.color = "red";
+        s.color = "#FF0000";  // red
       } else {
         // 11-25%
-        s.color = "orange";
+        s.color = "#FFA500";  // orange
       }
     } else {
       // 26-40%
-      s.color = "yellow";
+      s.color = "#FFFF00";  // yellow
     }
   } else {
     if (chargePercent > 70) {
-      s.color = "white";
+      s.color = "#FFFFFF";  // white
     } else {
       // 41-70%
-      s.color = "green";
+      s.color = "#22FF22";  // green
     }
   }
 

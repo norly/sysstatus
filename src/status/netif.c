@@ -44,7 +44,7 @@ void status_netif(GlobalData *g, char *ifname)
 
   /* Is the interface up? */
   if (access(ifpath, F_OK)) {
-    //s.color = "grey";
+    //s.color = "#BEBEBE";  // grey
     return;
   }
 
@@ -53,9 +53,9 @@ void status_netif(GlobalData *g, char *ifname)
   stlen = fileRead(stline, sizeof(stline), ifpath);
   if (stlen > 0) {
     if (stline[0] == '1') {
-      s.color = "yellow";
+      s.color = "#FFFF00";  // yellow
     } else {
-      //s.color = "red";
+      //s.color = "#FF0000";  // red
       return;
     }
   } else {

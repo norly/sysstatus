@@ -54,7 +54,7 @@ int status_volume_alsa(GlobalData *g,
     snd_mixer_selem_get_playback_volume_range(elem, &min, &max);
     snd_mixer_selem_get_playback_volume(elem, channel, &volume);
 
-    s.color = on_off ? "#22FF22" : "red";
+    s.color = on_off ? "#22FF22" : "#FF0000";  // green/red
     snprintf(text, sizeof(text), "Vol: %d", (int)volume);
   }
 

@@ -19,7 +19,7 @@ void status_datetime(GlobalData *g)
 
   nows = time(NULL);
   if (nows == ((time_t) -1)) {
-    s.color = "red";
+    s.color = "#FF0000";  // red
     s.text = "ERROR: DATETIME";
 
     line_append_item(g, &s);
@@ -35,7 +35,7 @@ void status_datetime(GlobalData *g)
             );
     line_append_item(g, &s);
 
-    s.color = "grey";
+    s.color = "#BEBEBE";  // grey
     snprintf(text, sizeof(text),
               "%d:%.2d"
               #ifdef SHOW_SECONDS
