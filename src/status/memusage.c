@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "common.h"
 #include "tools.h"
@@ -33,6 +34,9 @@ void status_memusage(GlobalData *g)
     memfree = atoi(&stline[17]);
 
     stlen = getline(&stline, &stlen, stfile);
+    if (stlen > 13 && !memcmp(stline, "MemAvailable:", 13)) {
+      stlen = getline(&stline, &stlen, stfile);
+    }
     membuffers = atoi(&stline[17]);
 
     stlen = getline(&stline, &stlen, stfile);
