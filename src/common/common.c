@@ -66,6 +66,9 @@ void line_append_item(GlobalData *g, StatusItem *s)
   line_append_str(g, s->text);
   line_append_str(g, "\"");
 
+  line_append_str(g, ",\"separator\":false");
+  line_append_str(g, ",\"separator_block_width\":14");
+
   line_append_str(g, "}");
 }
 
