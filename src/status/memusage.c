@@ -15,11 +15,11 @@ void status_memusage(GlobalData *g)
   size_t stlen;
   FILE *stfile;
 
-  int memtotal = 0;
-  int memfree = 0;
-  int memused;
-  int membuffers = 0;
-  int memcached = 0;
+  long long memtotal = 0;
+  long long memfree = 0;
+  long long memused;
+  long long membuffers = 0;
+  long long memcached = 0;
 
 
   statusitem_init(&s);
@@ -28,19 +28,19 @@ void status_memusage(GlobalData *g)
   stfile = fopen("/proc/meminfo", "r");
   if (stfile != NULL) {
     stlen = getline(&stline, &stlen, stfile);
-    memtotal = atoi(&stline[17]);
+    memtotal = atoll(&stline[16]);
 
     stlen = getline(&stline, &stlen, stfile);
-    memfree = atoi(&stline[17]);
+    memfree = atoll(&stline[16]);
 
     stlen = getline(&stline, &stlen, stfile);
     if (stlen > 13 && !memcmp(stline, "MemAvailable:", 13)) {
       stlen = getline(&stline, &stlen, stfile);
     }
-    membuffers = atoi(&stline[17]);
+    membuffers = atoll(&stline[16]);
 
     stlen = getline(&stline, &stlen, stfile);
-    memcached = atoi(&stline[17]);
+    memcached = atoll(&stline[16]);
     free(stline);
 
     fclose(stfile);
@@ -56,7 +56,7 @@ void status_memusage(GlobalData *g)
       s.color = "#FF0000";  // red
     }
 
-    snprintf(text, sizeof(text), "Mem: %d M", memused);
+    snprintf(text, sizeof(text), "Mem: %lld M", memused);
 
     line_append_item(g, &s);
   }
