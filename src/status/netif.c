@@ -15,7 +15,7 @@
 void status_netif(GlobalData *g, char *ifname)
 {
   StatusItem s;
-  char text[16] = { 0 };
+  char text[20] = { 0 };
 
   char ifpath[256];
   int ifpathlen;
