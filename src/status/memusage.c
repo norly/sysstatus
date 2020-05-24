@@ -20,6 +20,7 @@ void status_memusage(GlobalData *g)
   long long memused;
   long long membuffers = 0;
   long long memcached = 0;
+  long long slab_reclaimable = 0;
 
 
   statusitem_init(&s);
@@ -41,11 +42,18 @@ void status_memusage(GlobalData *g)
 
     stlen = getline(&stline, &stlen, stfile);
     memcached = atoll(&stline[16]);
-    free(stline);
 
+    while (0 < (stlen = getline(&stline, &stlen, stfile))) {
+      if (stlen > 13 && !memcmp(stline, "SReclaimable:", 13)) {
+        slab_reclaimable = atoll(&stline[16]);
+        break;
+      }
+    }
+
+    free(stline);
     fclose(stfile);
 
-    memused = memtotal - memfree - memcached - membuffers;
+    memused = memtotal - memfree - memcached - slab_reclaimable - membuffers;
 
     memused /= 1024;	// Just show MBs used
 
