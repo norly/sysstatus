@@ -25,7 +25,8 @@ void status_battery(GlobalData *g, char *batname)
   int chargeNow = 0;
   int chargeFull = -1;
   int chargePercent = -1;
-  int battW = 1;
+  int currentNow = 1;
+  int voltageNow = 0;
   float battTime = -1;
 
 
@@ -52,22 +53,28 @@ void status_battery(GlobalData *g, char *batname)
 
 
   /* Get info */
-  strcpy(&batpath[batpathlen], "/energy_now");
+  strcpy(&batpath[batpathlen], "/charge_now");
   stlen = fileRead(stline, sizeof(stline), batpath);
   if (stlen > 0) {
     chargeNow = atoi(stline);
   }
 
-  strcpy(&batpath[batpathlen], "/energy_full");
+  strcpy(&batpath[batpathlen], "/charge_full");
   stlen = fileRead(stline, sizeof(stline), batpath);
   if (stlen > 0) {
     chargeFull = atoi(stline);
   }
 
-  strcpy(&batpath[batpathlen], "/power_now");
+  strcpy(&batpath[batpathlen], "/current_now");
   stlen = fileRead(stline, sizeof(stline), batpath);
   if (stlen > 0) {
-    battW = atoi(stline);
+    currentNow = atoi(stline);
+  }
+
+  strcpy(&batpath[batpathlen], "/voltage_now");
+  stlen = fileRead(stline, sizeof(stline), batpath);
+  if (stlen > 0) {
+    voltageNow = atoi(stline);
   }
 
 
@@ -97,15 +104,15 @@ void status_battery(GlobalData *g, char *batname)
     }
   }
 
-  battTime = (float)chargeNow / (float)battW;
+  battTime = (float)chargeNow / (float)currentNow;
 
-  if (battW == 0) {
+  if (currentNow == 0) {
     // fully charged and not in use
     snprintf(text, sizeof(text), "%s: %d%% _ _",
               batname, chargePercent);
   } else {
     snprintf(text, sizeof(text), "%s: %d%% %.1fh %.1fW",
-              batname, chargePercent, battTime, (float)battW / 1000000.0);
+              batname, chargePercent, battTime, (float)voltageNow * (float)currentNow / 1000000.0);
   }
 
   line_append_item(g, &s);
