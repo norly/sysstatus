@@ -112,7 +112,7 @@ void status_battery(GlobalData *g, char *batname)
               batname, chargePercent);
   } else {
     snprintf(text, sizeof(text), "%s: %d%% %.1fh %.1fW",
-              batname, chargePercent, battTime, (float)voltageNow * (float)currentNow / 1000000.0);
+              batname, chargePercent, battTime, (float)voltageNow / 1000000.0 * (float)currentNow / 1000000.0);
   }
 
   line_append_item(g, &s);
